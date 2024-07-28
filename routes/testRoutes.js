@@ -3,5 +3,5 @@ import { TestPostController } from '../controllers/testController.js';
 
 const router  = express.Router()
 
-router.get('/test-post',TestPostController)
+router.post('/test-post',TestPostController)
 export default router;

@@ -1,19 +1,37 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import colors from 'colors'
-import testRoutes from './routes/testRoutes.js'
+import express from 'express';
+import dotenv from 'dotenv';
+import colors from 'colors';
+import cors from 'cors';
+import morgan from 'morgan';
 
-dotenv.config()
+import testRoutes from './routes/testRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import connectdb from './config/db.js';
 
-import connectdb from './config/db.js'
-const port = process.env.PORT ||8080
-const app = express()
+// Load environment variables from .env file
+dotenv.config();
 
-connectdb()
+const app = express();
 
-app.use('/api/v1/test',testRoutes)
 
-app.listen(port,()=>{
-  console.log("running".bgWhite.bold)
-})
+// Set the port from environment variables or default to 8080
+const port = process.env.PORT || 8080;
+console.log(`PORT: ${port}`);
 
+// Middleware
+app.use(express.json());
+app.use(cors()); 
+app.use(morgan('dev')); 
+
+
+// Connect to the database
+connectdb();
+
+// Routes
+app.use('/api/v1/test', testRoutes); 
+app.use('/api/v1/auth', authRoutes); 
+
+// Start the server
+app.listen(port, () => {
+  console.log("Server is running".bgWhite.bold);
+});
